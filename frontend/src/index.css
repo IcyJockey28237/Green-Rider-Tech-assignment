@@ -1,0 +1,90 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Global reset & base ─────────────────────────────────────────────────── */
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-slate-950 text-slate-100 font-sans antialiased;
+    min-height: 100vh;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-slate-900;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-slate-700 rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-slate-500;
+  }
+}
+
+/* ─── Reusable component classes ─────────────────────────────────────────── */
+@layer components {
+  .card {
+    @apply bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center gap-2 px-4 py-2 rounded-xl
+           bg-brand-500 hover:bg-brand-600 active:bg-brand-700
+           text-white font-semibold text-sm
+           transition-all duration-200 ease-out
+           focus:outline-none focus:ring-2 focus:ring-brand-400 focus:ring-offset-2 focus:ring-offset-slate-950
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center gap-2 px-4 py-2 rounded-xl
+           bg-slate-800 hover:bg-slate-700 active:bg-slate-600
+           text-slate-300 font-medium text-sm
+           transition-all duration-200 ease-out
+           focus:outline-none focus:ring-2 focus:ring-slate-600 focus:ring-offset-2 focus:ring-offset-slate-950;
+  }
+
+  .btn-danger {
+    @apply inline-flex items-center gap-2 px-4 py-2 rounded-xl
+           bg-rose-600 hover:bg-rose-500
+           text-white font-semibold text-sm
+           transition-all duration-200 ease-out;
+  }
+
+  .input {
+    @apply w-full px-4 py-2.5 rounded-xl
+           bg-slate-800 border border-slate-700
+           text-slate-100 placeholder-slate-500
+           focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent
+           transition duration-200;
+  }
+
+  /* Override browser native autofill styling for dark theme */
+  .input:-webkit-autofill,
+  .input:-webkit-autofill:hover, 
+  .input:-webkit-autofill:focus, 
+  .input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px #1e293b inset !important;
+    -webkit-text-fill-color: #f1f5f9 !important;
+    transition: background-color 5000s ease-in-out 0s;
+  }
+
+  .label {
+    @apply block text-sm font-medium text-slate-400 mb-1.5;
+  }
+
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold;
+  }
+}
