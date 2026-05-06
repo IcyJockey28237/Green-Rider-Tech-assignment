@@ -49,7 +49,7 @@ fake = Faker()
 Faker.seed(42)
 random.seed(42)
 
-DEMO_PASSWORD = "Password123!"
+DEMO_PASSWORD = "admin@workflow123"
 HASHED_DEMO_PASSWORD = get_password_hash(DEMO_PASSWORD)
 
 
