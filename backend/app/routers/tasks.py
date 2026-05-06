@@ -201,6 +201,7 @@ def dashboard_stats(
                 id=proj.id,
                 name=proj.name,
                 description=proj.description,
+                team_id=proj.team_id,
                 created_by=proj.created_by,
                 created_at=proj.created_at,
                 total_tasks=n_total,

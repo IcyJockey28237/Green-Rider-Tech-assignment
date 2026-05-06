@@ -42,7 +42,51 @@ class UserRead(BaseModel):
     email: str
     full_name: str
     is_active: bool
+    is_admin: bool
     created_at: datetime
+
+
+# ─── Team ───────────────────────────────────────────────────────────────────
+
+class TeamCreate(BaseModel):
+    name: str
+    description: str | None = None
+
+
+class TeamUpdate(BaseModel):
+    name: str | None = None
+    description: str | None = None
+
+
+class TeamRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: UUID
+    name: str
+    description: str | None
+    created_at: datetime
+
+
+# ─── Team Members ────────────────────────────────────────────────────────────
+
+class TeamMemberAdd(BaseModel):
+    user_id: UUID
+    role: RoleEnum = RoleEnum.member
+
+
+class TeamMemberRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: UUID
+    team_id: UUID
+    user_id: UUID
+    role: RoleEnum
+    joined_at: datetime
+    user: UserRead
+
+
+class TeamReadWithMembers(TeamRead):
+    members: list[TeamMemberRead]
 
 
 # ─── Project ──────────────────────────────────────────────────────────────────
@@ -50,6 +94,7 @@ class UserRead(BaseModel):
 class ProjectCreate(BaseModel):
     name: str
     description: str | None = None
+    team_id: UUID | None = None
 
 
 class ProjectRead(BaseModel):
@@ -58,6 +103,7 @@ class ProjectRead(BaseModel):
     id: UUID
     name: str
     description: str | None
+    team_id: UUID | None
     created_by: UUID
     created_at: datetime
 

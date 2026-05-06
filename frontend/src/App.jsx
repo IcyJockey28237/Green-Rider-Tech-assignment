@@ -15,6 +15,9 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Dashboard from './pages/Dashboard'
 import ProjectDetail from './pages/ProjectDetail'
+import AdminTeams from './pages/AdminTeams'
+import TeamDetail from './pages/TeamDetail'
+import AdminRoute from './components/AdminRoute'
 
 function ProtectedRoute({ children }) {
   const { user, isLoading } = useAuth()
@@ -47,6 +50,14 @@ function AppRoutes() {
         <Route
           path="/projects/:projectId"
           element={<ProtectedRoute><ProjectDetail /></ProtectedRoute>}
+        />
+        <Route
+          path="/admin/teams"
+          element={<AdminRoute><AdminTeams /></AdminRoute>}
+        />
+        <Route
+          path="/admin/teams/:teamId"
+          element={<AdminRoute><TeamDetail /></AdminRoute>}
         />
         {/* 404 catch-all */}
         <Route path="*" element={<Navigate to="/dashboard" replace />} />

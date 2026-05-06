@@ -51,24 +51,56 @@ class User(Base):
     full_name       = Column(String(255), nullable=False)
     hashed_password = Column(Text, nullable=False)
     is_active       = Column(Boolean, default=True, nullable=False)
+    is_admin        = Column(Boolean, default=False, nullable=False)
     created_at      = Column(DateTime(timezone=True), server_default=func.now())
 
     # relationships
     projects_created = relationship("Project", back_populates="creator")
     memberships      = relationship("ProjectMember", back_populates="user")
+    team_memberships = relationship("TeamMember", back_populates="user")
     tasks_assigned   = relationship("Task", foreign_keys="Task.assigned_to", back_populates="assignee")
     tasks_created    = relationship("Task", foreign_keys="Task.created_by", back_populates="creator")
+
+
+class Team(Base):
+    __tablename__ = "teams"
+
+    id          = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    name        = Column(String(255), nullable=False)
+    description = Column(Text, nullable=True)
+    created_at  = Column(DateTime(timezone=True), server_default=func.now())
+
+    members  = relationship("TeamMember", back_populates="team", cascade="all, delete-orphan")
+    projects = relationship("Project", back_populates="team")
+
+
+class TeamMember(Base):
+    __tablename__ = "team_members"
+    __table_args__ = (
+        UniqueConstraint("team_id", "user_id", name="uq_team_user"),
+    )
+
+    id      = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    team_id = Column(UUID(as_uuid=True), ForeignKey("teams.id", ondelete="CASCADE"), nullable=False)
+    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id",  ondelete="CASCADE"), nullable=False)
+    role    = Column(Enum(RoleEnum, name="teamroleenum"), nullable=False, default=RoleEnum.member)
+    joined_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    team = relationship("Team", back_populates="members")
+    user = relationship("User", back_populates="team_memberships")
 
 
 class Project(Base):
     __tablename__ = "projects"
 
     id          = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    team_id     = Column(UUID(as_uuid=True), ForeignKey("teams.id", ondelete="SET NULL"), nullable=True)
     name        = Column(String(255), nullable=False)
     description = Column(Text, nullable=True)
     created_by  = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     created_at  = Column(DateTime(timezone=True), server_default=func.now())
 
+    team    = relationship("Team", back_populates="projects")
     creator = relationship("User", back_populates="projects_created")
     members = relationship("ProjectMember", back_populates="project", cascade="all, delete-orphan")
     tasks   = relationship("Task", back_populates="project", cascade="all, delete-orphan")

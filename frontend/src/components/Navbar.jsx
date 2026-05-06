@@ -2,7 +2,7 @@
  * Navbar.jsx — Top navigation bar.
  */
 import { Link } from 'react-router-dom'
-import { CheckSquare, LogOut, LayoutDashboard } from 'lucide-react'
+import { CheckSquare, LogOut, LayoutDashboard, Users } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 
 export default function Navbar() {
@@ -31,6 +31,18 @@ export default function Navbar() {
             <LayoutDashboard size={15} />
             Dashboard
           </Link>
+
+          {user?.is_admin && (
+            <Link
+              to="/admin/teams"
+              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg
+                         text-sm text-slate-400 hover:text-slate-100 hover:bg-slate-800
+                         transition-all duration-200"
+            >
+              <Users size={15} />
+              Teams
+            </Link>
+          )}
 
           {user && (
             <>

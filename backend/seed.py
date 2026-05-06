@@ -3,7 +3,8 @@ seed.py — Populate the database with realistic fake data using the Faker libra
 
 Generates:
   - 6 users  (1 super-admin, 5 regular)
-  - 3 projects
+  - 1 team
+  - 3 projects (belonging to the team)
   - Each project has 1 Admin + 2-4 Members
   - 8-12 tasks per project with mixed statuses, priorities, and due dates
     (including deliberately overdue tasks so the Dashboard is interesting)
@@ -34,6 +35,8 @@ from app.models import (
     StatusEnum,
     Task,
     User,
+    Team,
+    TeamMember,
 )
 
 try:
@@ -72,7 +75,8 @@ def _random_due_date() -> datetime:
 
 
 def seed():
-    # Ensure tables exist
+    # Ensure tables exist (drop first to apply schema changes)
+    Base.metadata.drop_all(bind=engine)
     Base.metadata.create_all(bind=engine)
 
     db = SessionLocal()
@@ -82,17 +86,20 @@ def seed():
         db.query(Task).delete()
         db.query(ProjectMember).delete()
         db.query(Project).delete()
+        db.query(TeamMember).delete()
+        db.query(Team).delete()
         db.query(User).delete()
         db.commit()
 
         # ── Create users ──────────────────────────────────────────────────────
         print("👤  Creating users …")
         users = []
-        # First user is the "platform admin" who owns all projects
+        # First user is the "platform admin"
         admin_user = User(
             email="admin@taskmanager.dev",
             full_name="Alex Morgan (Admin)",
             hashed_password=HASHED_DEMO_PASSWORD,
+            is_admin=True,
         )
         db.add(admin_user)
         users.append(admin_user)
@@ -118,6 +125,22 @@ def seed():
         db.flush()
         print(f"   ✔  {len(users)} users created")
 
+        # ── Create teams ──────────────────────────────────────────────────────
+        print("👥  Creating teams …")
+        engineering_team = Team(
+            name="Engineering",
+            description="Core engineering team responsible for the product platform.",
+        )
+        db.add(engineering_team)
+        db.flush()
+
+        db.add(TeamMember(team_id=engineering_team.id, user_id=admin_user.id, role=RoleEnum.admin))
+        for u in users[1:]:
+            db.add(TeamMember(team_id=engineering_team.id, user_id=u.id, role=RoleEnum.member))
+        
+        db.flush()
+        print("   ✔  Engineering team created with members")
+
         # ── Create projects ───────────────────────────────────────────────────
         print("📁  Creating projects …")
         project_data = [
@@ -141,6 +164,7 @@ def seed():
                 name=pd["name"],
                 description=pd["description"],
                 created_by=admin_user.id,
+                team_id=engineering_team.id,
             )
             db.add(p)
             projects.append(p)

@@ -54,12 +54,6 @@ export default function Login() {
 
         {/* Card */}
         <div className="card">
-          {/* Demo hint */}
-          <div className="mb-6 p-3 rounded-xl bg-brand-950/60 border border-brand-800/50 text-xs text-brand-300 space-y-1">
-            <div><strong>Admin:</strong>&nbsp; admin@taskmanager.dev&nbsp;/&nbsp;Password123!</div>
-            <div><strong>User:</strong>&nbsp; member@taskmanager.dev&nbsp;/&nbsp;Password123!</div>
-          </div>
-
           {error && (
             <div className="flex items-center gap-2 mb-5 p-3 rounded-xl bg-rose-950/60 border border-rose-800
                             text-sm text-rose-400 animate-fade-in">

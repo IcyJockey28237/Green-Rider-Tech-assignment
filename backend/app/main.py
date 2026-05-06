@@ -11,7 +11,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from .database import Base, engine
-from .routers import auth, projects, tasks, users
+from .routers import auth, projects, tasks, users, teams
 
 load_dotenv()
 
@@ -45,6 +45,7 @@ app.add_middleware(
 
 app.include_router(auth.router)
 app.include_router(users.router)
+app.include_router(teams.router)
 app.include_router(projects.router)
 app.include_router(tasks.router)
 
