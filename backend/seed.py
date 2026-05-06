@@ -49,8 +49,10 @@ fake = Faker()
 Faker.seed(42)
 random.seed(42)
 
-DEMO_PASSWORD = "admin@workflow123"
-HASHED_DEMO_PASSWORD = get_password_hash(DEMO_PASSWORD)
+ADMIN_PASSWORD = "admin@workflow123"
+MEMBER_PASSWORD = "Password123!"
+HASHED_ADMIN_PASSWORD = get_password_hash(ADMIN_PASSWORD)
+HASHED_MEMBER_PASSWORD = get_password_hash(MEMBER_PASSWORD)
 
 
 def _random_past(days: int = 30) -> datetime:
@@ -98,7 +100,7 @@ def seed():
         admin_user = User(
             email="admin@taskmanager.dev",
             full_name="Alex Morgan (Admin)",
-            hashed_password=HASHED_DEMO_PASSWORD,
+            hashed_password=HASHED_ADMIN_PASSWORD,
             is_admin=True,
         )
         db.add(admin_user)
@@ -108,7 +110,7 @@ def seed():
         member_user = User(
             email="member@taskmanager.dev",
             full_name="Sam Smith (Member)",
-            hashed_password=HASHED_DEMO_PASSWORD,
+            hashed_password=HASHED_MEMBER_PASSWORD,
         )
         db.add(member_user)
         users.append(member_user)
@@ -117,7 +119,7 @@ def seed():
             u = User(
                 email=fake.unique.email(),
                 full_name=fake.name(),
-                hashed_password=HASHED_DEMO_PASSWORD,
+                hashed_password=HASHED_MEMBER_PASSWORD,
             )
             db.add(u)
             users.append(u)
@@ -252,9 +254,8 @@ def seed():
         print("\n" + "═" * 52)
         print("🎉  Seed complete!")
         print("═" * 52)
-        print(f"  Admin Login   : admin@taskmanager.dev")
-        print(f"  Member Login  : member@taskmanager.dev")
-        print(f"  Password      : {DEMO_PASSWORD}")
+        print(f"  Admin Login   : admin@taskmanager.dev / {ADMIN_PASSWORD}")
+        print(f"  Member Login  : member@taskmanager.dev / {MEMBER_PASSWORD}")
         print(f"  Projects      : {len(projects)}")
         print(f"  Users         : {len(users)}")
         print(f"  Tasks         : {total_tasks}")
