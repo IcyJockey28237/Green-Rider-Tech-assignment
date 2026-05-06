@@ -9,7 +9,7 @@ A full-stack project and task management application with project-scoped RBAC an
 - **Project Management**: Create and manage projects with scoped access.
 - **Task Management**: Create, update, and assign tasks with priority and due dates.
 - **RBAC**: Project-level roles (Admin/Member) and global platform Admin role.
-- **Team Management (Admin Only)**: 
+- **Team Management (Admin Only)**:
     - Create and manage global teams.
     - Assign users to teams.
     - Associate projects with teams for better organization.
@@ -88,8 +88,8 @@ A full-stack project and task management application with project-scoped RBAC an
 
 After running `seed.py`, you can log in with:
 
-- **Admin Account**: `admin@taskmanager.dev` / `Password123!`
-- **Member Account**: `member@taskmanager.dev` / `Password123!`
+- **Admin Account**: will be given, if requested
+- **Member Account**: `member@taskmanager.dev` / `Password123!` or add your own account by signing up
 
 ## 📝 License
 
